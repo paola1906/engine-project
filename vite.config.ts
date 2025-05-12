@@ -6,7 +6,7 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: 'feels-technology-test',
+  base: '/engine-project/',
   plugins: [
     vue(),
     vueDevTools(),
