@@ -1,0 +1,43 @@
+.article {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &__title {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__go-back {
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-success-700);
+  }
+
+  &__img {
+    height: clamp(200px, 50vh, 500px);
+    img {
+      height: 100%;
+      width: 50%;
+      min-width: 250px;
+      object-fit: cover;
+    }
+  }
+
+  &__list {
+    display: flex;
+    gap: 16px;
+    flex-direction: column;
+  }
+
+  &__items {
+    display: flex;
+    gap: 4px;
+  }
+
+  &__items-title {
+    font-size: 18px;
+    white-space: nowrap;
+  }
+}
