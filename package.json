@@ -10,8 +10,7 @@
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
     "format": "prettier --write src/",
-    "serve": "vue-cli-service serve",
-    "deploy": "gh-pages -d dist"
+    "serve": "vue-cli-service serve"
   },
   "dependencies": {
     "pinia": "^3.0.1",

@@ -1,0 +1,62 @@
+# Flujo de trabajo para construir y desplegar un sitio de Vue a GitHub Pages
+name: Desplegar Vue a GitHub Pages
+
+on:
+  # Se ejecuta en cada push a la rama principal
+  push:
+    branches: ["main"]
+
+  # Permite ejecutar este flujo de trabajo manualmente desde la pestaña Actions
+  workflow_dispatch:
+
+# Establece los permisos del GITHUB_TOKEN para permitir el despliegue a GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Permite solo un despliegue concurrente, omitiendo las ejecuciones en cola entre la ejecución en curso y la última en cola.
+# Sin embargo, NO cancela las ejecuciones en curso, ya que queremos permitir que se completen estos despliegues de producción.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # Trabajo de construcción
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"  # O la versión de Node que uses
+      - name: Install Dependencies
+        run: npm install # o yarn install
+      - name: Build
+        run: npm run build-only # o yarn build-only
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+        with:
+          # Ruta al directorio que contiene los archivos estáticos generados por `npm run build`
+          # Generalmente es 'dist', pero verifica la configuración de tu proyecto.
+          path: ./dist
+          enablement: false
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Ruta al directorio que contiene los archivos estáticos generados por `npm run build`
+          path: ./dist
+
+  # Trabajo de despliegue
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
